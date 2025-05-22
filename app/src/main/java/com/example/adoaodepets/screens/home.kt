@@ -2,6 +2,7 @@ package com.example.adoaodepets.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.navigation.NavController
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,12 +28,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
 import com.example.adoaodepets.R
 
 @Composable
 
 
-fun  homeCadastro(){
+fun  homeCadastro(navController: NavController){
     Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -96,7 +98,7 @@ fun  homeCadastro(){
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = { /* ação */ },
+                onClick = {navController.navigate("user_data")},
                 shape = RoundedCornerShape(30),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF8D6E63) // marrom
@@ -126,6 +128,8 @@ fun  homeCadastro(){
 
 @Preview(showSystemUi = true)
 @Composable
-private fun cadastroScreenPreview(){
-    homeCadastro()
+fun cadastroScreenPreview(){
+    val navController = rememberNavController() // mock navController só para preview
+    homeCadastro(navController)
+
 }

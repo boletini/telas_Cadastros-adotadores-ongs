@@ -15,9 +15,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -35,7 +37,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
 
         Button(
-            onClick = { },
+            onClick = {navController.navigate("user_data")},
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 200.dp)
@@ -62,6 +64,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-private fun TelaHomePreview() {
-    HomeScreen()
+fun TelaHomePreview() {
+    val navController = rememberNavController() // mock navController só para preview
+    HomeScreen(navController)
 }

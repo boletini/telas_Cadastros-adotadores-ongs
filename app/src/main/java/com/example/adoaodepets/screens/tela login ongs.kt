@@ -19,10 +19,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.adoaodepets.R
 
 @Composable
-fun TelaCriarConta() {
+fun TelaCriarConta(navController: NavController) {
 
     Column(
         modifier = Modifier
@@ -117,7 +119,7 @@ fun TelaCriarConta() {
             Spacer(modifier = Modifier.height(20.dp))
 
             Button(
-                onClick = { /* ação do botão */ },
+                onClick = {navController.navigate("user_data")},
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF4E342E)
                 ),
@@ -141,5 +143,6 @@ fun TelaCriarConta() {
 @Preview(showSystemUi = true)
 @Composable
 fun TelaCadastroOngsPreview() {
-    TelaCriarConta()
+    val navController = rememberNavController()
+    TelaCriarConta(navController)
 }
