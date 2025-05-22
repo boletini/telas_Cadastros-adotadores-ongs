@@ -1,6 +1,5 @@
 package com.example.adoaodepets.screens
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,7 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,7 +23,6 @@ import com.example.adoaodepets.R
 
 @Composable
 fun TelaCriarConta() {
-
 
     Column(
         modifier = Modifier
@@ -56,7 +53,7 @@ fun TelaCriarConta() {
         // Campos de entrada
         Column(modifier = Modifier.padding(horizontal = 32.dp)) {
             OutlinedTextField(
-                value = "nome",
+                value = "",
                 onValueChange = {},
                 label = { Text(text = stringResource(R.string.label_nome)) },
                 modifier = Modifier.fillMaxWidth()
@@ -65,7 +62,7 @@ fun TelaCriarConta() {
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
-                value = "email",
+                value = "",
                 onValueChange = {},
                 label = { Text(text = stringResource(R.string.label_email)) },
                 modifier = Modifier.fillMaxWidth()
@@ -74,7 +71,7 @@ fun TelaCriarConta() {
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
-                value = "telefone",
+                value = "",
                 onValueChange = {},
                 label = { Text(text = stringResource(R.string.label_telefone)) },
                 modifier = Modifier.fillMaxWidth()
@@ -86,6 +83,7 @@ fun TelaCriarConta() {
             OutlinedTextField(
                 value = "",
                 onValueChange = {},
+                label = { Text(text = stringResource(R.string.dropdown_interesse)) },
                 readOnly = true,
                 trailingIcon = {
                     Icon(Icons.Filled.ArrowDropDown, contentDescription = null)
@@ -96,32 +94,46 @@ fun TelaCriarConta() {
             )
         }
 
-        // Texto: Faz parte de uma ONG?
-        Text(
-            text = stringResource(R.string.pergunta_ong),
-            fontSize = 14.sp,
-            color = Color.Black,
-            textAlign = TextAlign.Center,
+        // Linha com pergunta + botão juntos
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.padding(top = 16.dp)
-        )
-
-        // Botão
-        Button(
-            onClick = { /* ação de cadastro */ },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFE0DED4)
-            ),
-            shape = RoundedCornerShape(50),
-            elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp),
+        ) {}
+        // Pergunta + botão abaixo com espaçamento
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .width(160.dp)
-                .height(40.dp)
+                .padding(bottom = 100.dp)
         ) {
             Text(
-                text = stringResource(R.string.botao_cadastrar),
-                color = Color(0xFF4E342E),
-                fontSize = 14.sp
+                text = stringResource(R.string.pergunta_ong),
+                fontSize = 20.sp,
+                color = Color.Black,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(bottom = 25.dp)
             )
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Button(
+                onClick = { /* ação do botão */ },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF4E342E)
+                ),
+                shape = RoundedCornerShape(50),
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp),
+                modifier = Modifier
+                    .width(200.dp)
+                    .height(50.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.botao_cadastrar),
+                    color = Color.White,
+                    fontSize = 16.sp
+                )
+            }
+
         }
     }
 }
