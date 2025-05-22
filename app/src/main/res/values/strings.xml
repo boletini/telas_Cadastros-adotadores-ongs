@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">adoçao de pets</string>
+
+    <string name="entrar">Entrar com</string>
+    <string name="email_loginCuidador"> Email</string>
+    <string name="senha_login_cuidador">Password</string>
+    <string name="esqueceuSenha_login_cuidador">Esqueceu a senha?</string>
+    <string name="entrarBotao_login_cuidador">Entrar</string>
+
+    /*fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff*/
+
+    <string name="MENSAGEM_usuario">Olá, Pai de</string>
+    <string name="mensagem_boas_vindas">Bem-vindo ao nosso cantinho de amor e esperança!</string>
+    <string name="mensagem_convite">Cadastre-se e procure por um novo amigo!</string>
+    <string name="botao_cadastrar">Cadastrar</string>
+    <string name="icone_pata">Ícone de pata</string>
+
+    /*fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff*/
+
+        <string name="titulo_criar_conta">Criar Conta</string>
+
+        <string name="icone">Ícone de pata</string>
+
+        <string name="label_nome">Nome:</string>
+        <string name="label_email">Email:</string>
+        <string name="label_telefone">Telefone:</string>
+        <string name="dropdown_interesse">Interessado em:</string>
+
+        <string name="pergunta_ong">Faz parte de uma ONG’s?</string>
+
+
+        <string name="botao_cadastrarONGS">Cadastrar</string>
+
+
+</resources>
