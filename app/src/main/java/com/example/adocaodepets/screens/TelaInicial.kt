@@ -1,4 +1,4 @@
-package com.example.adoaodepets.screens
+package com.example.adocaodepets.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,10 +22,11 @@ fun TelaInicial(navController: NavController?) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF6D4C41))
+            .background(Color(0xFF6D4C41)) // fundo marrom escuro
     ) {
+        // Imagem centralizada
         Image(
-            painter = painterResource(com.example.adoaodepets.R.drawable.cachorro_caixa),
+            painter = painterResource(br.senai.sp.jandira.com.example.adocaodepets.R.drawable.cachorro_caixa),
             contentDescription = "Imagem menino na caixa",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -34,33 +35,28 @@ fun TelaInicial(navController: NavController?) {
                 .offset(y = (-200).dp)
         )
 
-
+        // Botão de entrada
         Button(
-            onClick = { navController?.navigate("home_cadastro") },
+            onClick = { navController?.navigate("tela_login") },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 200.dp)
                 .size(width = 180.dp, height = 60.dp),
-
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF4E342E), // nova cor
+                containerColor = Color(0xFF4E342E), // marrom botão
                 contentColor = Color.White
-
             )
         ) {
-
             Text(
                 text = "Entrar",
                 fontSize = 30.sp
             )
-
-
         }
     }
 }
 
 @Preview(showSystemUi = true)
 @Composable
-private fun TelaIniciaPreviewl() {
+private fun TelaInicialPreview() {
     TelaInicial(null)
 }

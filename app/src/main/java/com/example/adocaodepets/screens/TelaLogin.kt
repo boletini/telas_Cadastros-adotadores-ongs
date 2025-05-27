@@ -1,23 +1,12 @@
-package com.example.adoaodepets.screens
+package com.example.adocaodepets.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedTextField
-import androidx.navigation.NavController
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,16 +17,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.adoaodepets.R
+import androidx.navigation.NavController
+import br.senai.sp.jandira.com.example.adocaodepets.R
+
 
 @Composable
+fun TelaLogin(navController: NavController?) {
 
+    // Campos de entrada
+    var email by remember { mutableStateOf("") }
+    var senha by remember { mutableStateOf("") }
 
-fun HomeCadastro(navController: NavController?  = null) {
     Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0xFFF5F5DC)) // fundo beg
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFF5F5DC)) // fundo bege
     ) {
         Column(
             modifier = Modifier
@@ -48,8 +42,7 @@ fun HomeCadastro(navController: NavController?  = null) {
         ) {
             Text(
                 text = stringResource(R.string.entrar),
-                modifier = Modifier
-                    .padding(10.dp),
+                modifier = Modifier.padding(10.dp),
                 fontSize = 40.sp,
                 color = Color.Black
             )
@@ -58,16 +51,17 @@ fun HomeCadastro(navController: NavController?  = null) {
 
             Image(
                 painter = painterResource(id = R.drawable.cachorro_caixa),
-                contentDescription = "",
-                modifier = Modifier.height(300.dp)
+                contentDescription = "Ilustração de cachorro em uma caixa",
+                modifier = Modifier
+                    .height(300.dp)
                     .width(300.dp)
             )
 
             Spacer(modifier = Modifier.height(30.dp))
 
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = email,
+                onValueChange = { email = it },
                 label = { Text(stringResource(R.string.email_loginCuidador)) },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -75,8 +69,8 @@ fun HomeCadastro(navController: NavController?  = null) {
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = senha,
+                onValueChange = { senha = it },
                 label = { Text(stringResource(R.string.senha_login_cuidador)) },
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth()
@@ -89,18 +83,19 @@ fun HomeCadastro(navController: NavController?  = null) {
                 fontSize = 12.sp,
                 color = Color.Black,
                 modifier = Modifier
+                    .clickable {
+                        navController?.navigate("esqueci_senha")
+                    }
                     .fillMaxWidth()
                     .padding(end = 8.dp),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = {
-                    if (navController != null) {
-                        navController.navigate("user_data")
-                    }
+                    navController?.navigate("tela_inicial_cadastrar")
                 },
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(
@@ -113,22 +108,15 @@ fun HomeCadastro(navController: NavController?  = null) {
             ) {
                 Text(
                     text = stringResource(R.string.entrarBotao_login_cuidador),
-                    color = Color.White // texto branco para contraste
+                    color = Color.White
                 )
             }
-
         }
     }
 }
 
-
-
-
-
-
-
 @Preview(showSystemUi = true)
 @Composable
-private fun HomeCadastroPreview() {
-    HomeCadastro(null)
+private fun TelaLoginPreview() {
+    TelaLogin(null)
 }

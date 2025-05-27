@@ -1,4 +1,4 @@
-package com.example.adoaodepets.screens
+package com.example.adocaodepets.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.adoaodepets.R
+import br.senai.sp.jandira.com.example.adocaodepets.R
 
 @Composable
 fun TelaInicialCadastrar(navController: NavController?) {
@@ -24,7 +24,7 @@ fun TelaInicialCadastrar(navController: NavController?) {
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF6D4C41)),
-                horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
         // Saudação com ícone
@@ -39,7 +39,7 @@ fun TelaInicialCadastrar(navController: NavController?) {
             )
             Spacer(modifier = Modifier.width(15.dp))
             Image(
-                painter = painterResource(id = R.drawable.pata), // Substitua pela sua imagem
+                painter = painterResource(id = R.drawable.pata),
                 contentDescription = stringResource(R.string.icone_pata),
                 modifier = Modifier.size(70.dp)
             )
@@ -64,13 +64,12 @@ fun TelaInicialCadastrar(navController: NavController?) {
         )
 
         Spacer(modifier = Modifier.width(7.dp))
-        // Botão
+
+        // Botão “Cadastrar”
         Button(
-            onClick = {
-                navController?.navigate("result_screen") // ANTES: "user_data"
-            },
+            onClick = { navController?.navigate("tela_cadastro") },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFA4E342E)
+                containerColor = Color(0xFF4E342E)   // marrom
             ),
             shape = RoundedCornerShape(50),
             elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp),
@@ -84,13 +83,10 @@ fun TelaInicialCadastrar(navController: NavController?) {
             )
         }
     }
-
 }
-
-
 
 @Preview(showSystemUi = true)
 @Composable
-private fun TelaInicialCadastrarPreviewl() {
-    TelaInicialCadastrar(null)
+private fun TelaInicialCadastrarPreview() {
+    TelaInicialCadastrar(navController = null)
 }

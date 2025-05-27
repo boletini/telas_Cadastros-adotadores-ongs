@@ -12,17 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AdoçaoDePets"
         tools:targetApi="31">
+
         <activity
-            android:name=".MainActivity"
+            android:name="br.senai.sp.jandira.com.example.adocaodepets.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.AdoçaoDePets">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

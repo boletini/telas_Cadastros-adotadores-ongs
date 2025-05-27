@@ -24,9 +24,7 @@
         <string name="label_nome">Nome:</string>
         <string name="label_email">Email:</string>
         <string name="label_telefone">Telefone:</string>
-        <string name="dropdown_interesse">Interessado em:</string>
-
-        <string name="pergunta_ong">Faz parte de uma ONG’s?</string>
+        <string name="Voce_é">Você é:</string>
 
 
         <string name="botao_cadastrarONGS">Cadastrar</string>
