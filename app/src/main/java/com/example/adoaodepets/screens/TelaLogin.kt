@@ -16,11 +16,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.adoaodepets.R
 
 @Composable
-fun TelaBoasVindasSimplificada(navController: NavController) {
+fun TelaLogin(navController: NavController?) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -67,7 +66,11 @@ fun TelaBoasVindasSimplificada(navController: NavController) {
         Spacer(modifier = Modifier.width(7.dp))
         // Botão
         Button(
-            onClick = {navController.navigate("user_data")},
+            onClick = {
+                if (navController != null) {
+                    navController.navigate("user_data")
+                }
+            },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF4E342E) // cor correta do botão
             ),
@@ -87,9 +90,9 @@ fun TelaBoasVindasSimplificada(navController: NavController) {
 }
 
 
+
 @Preview(showSystemUi = true)
 @Composable
-fun TelaBoasVindasPreview() {
-    val navController = rememberNavController() // mock navController só para preview
-    TelaBoasVindasSimplificada(navController)
+private fun TelaLoginPreviewl() {
+    TelaLogin(null)
 }

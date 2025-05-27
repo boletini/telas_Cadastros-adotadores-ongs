@@ -2,7 +2,6 @@ package com.example.adoaodepets.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.navigation.NavController
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
+import androidx.navigation.NavController
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,13 +28,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.rememberNavController
 import com.example.adoaodepets.R
 
 @Composable
 
 
-fun  homeCadastro(navController: NavController){
+fun HomeCadastro(navController: NavController?  = null) {
     Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -98,7 +97,11 @@ fun  homeCadastro(navController: NavController){
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = {navController.navigate("user_data")},
+                onClick = {
+                    if (navController != null) {
+                        navController.navigate("user_data")
+                    }
+                },
                 shape = RoundedCornerShape(30),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF8D6E63) // marrom
@@ -124,12 +127,8 @@ fun  homeCadastro(navController: NavController){
 
 
 
-
-
 @Preview(showSystemUi = true)
 @Composable
-fun cadastroScreenPreview(){
-    val navController = rememberNavController() // mock navController só para preview
-    homeCadastro(navController)
-
+private fun HomeCadastroPreview() {
+    HomeCadastro(null)
 }
