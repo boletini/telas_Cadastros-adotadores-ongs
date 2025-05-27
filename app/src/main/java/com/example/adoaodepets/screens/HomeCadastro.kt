@@ -102,9 +102,9 @@ fun HomeCadastro(navController: NavController?  = null) {
                         navController.navigate("user_data")
                     }
                 },
-                shape = RoundedCornerShape(30),
+                shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF8D6E63) // marrom
+                    containerColor = Color(0xFF4E342E) // marrom
                 ),
                 modifier = Modifier
                     .width(150.dp)

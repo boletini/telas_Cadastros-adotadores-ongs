@@ -119,9 +119,7 @@ fun TelaCriarConta(navController: NavController?) {
 
             Button(
                 onClick = {
-                    if (navController != null) {
-                        navController.navigate("user_data")
-                    }
+                    navController?.navigate("home")
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF4E342E)
@@ -138,6 +136,7 @@ fun TelaCriarConta(navController: NavController?) {
                     fontSize = 16.sp
                 )
             }
+
 
         }
     }

@@ -19,12 +19,12 @@ import androidx.navigation.NavController
 import com.example.adoaodepets.R
 
 @Composable
-fun TelaLogin(navController: NavController?) {
+fun TelaInicialCadastrar(navController: NavController?) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF8D6E63)), // fundo marrom médio
-        horizontalAlignment = Alignment.CenterHorizontally,
+            .background(Color(0xFF6D4C41)),
+                horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
         // Saudação com ícone
@@ -67,22 +67,20 @@ fun TelaLogin(navController: NavController?) {
         // Botão
         Button(
             onClick = {
-                if (navController != null) {
-                    navController.navigate("user_data")
-                }
+                navController?.navigate("result_screen") // ANTES: "user_data"
             },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF4E342E) // cor correta do botão
+                containerColor = Color(0xFFA4E342E)
             ),
             shape = RoundedCornerShape(50),
             elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp),
             modifier = Modifier
-                .width(160.dp)
-                .height(40.dp)
+                .width(180.dp)
+                .height(50.dp)
         ) {
             Text(
                 text = stringResource(R.string.botao_cadastrar),
-                fontSize = 14.sp
+                fontSize = 20.sp
             )
         }
     }
@@ -93,6 +91,6 @@ fun TelaLogin(navController: NavController?) {
 
 @Preview(showSystemUi = true)
 @Composable
-private fun TelaLoginPreviewl() {
-    TelaLogin(null)
+private fun TelaInicialCadastrarPreviewl() {
+    TelaInicialCadastrar(null)
 }

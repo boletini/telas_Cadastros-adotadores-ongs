@@ -22,7 +22,7 @@ fun TelaInicial(navController: NavController?) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF8D6E63))
+            .background(Color(0xFF6D4C41))
     ) {
         Image(
             painter = painterResource(com.example.adoaodepets.R.drawable.cachorro_caixa),
@@ -36,15 +36,14 @@ fun TelaInicial(navController: NavController?) {
 
 
         Button(
-            onClick = {navController.navigate("user_data")},
+            onClick = { navController?.navigate("home_cadastro") },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 200.dp)
                 .size(width = 180.dp, height = 60.dp),
 
-
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF4E342E),
+                containerColor = Color(0xFF4E342E), // nova cor
                 contentColor = Color.White
 
             )
