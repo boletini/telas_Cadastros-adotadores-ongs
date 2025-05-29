@@ -3,9 +3,10 @@
 
     <string name="entrar">Entrar com</string>
     <string name="email_loginCuidador"> Email</string>
-    <string name="senha_login_cuidador">Password</string>
+    <string name="senha_login_cuidador">Senha</string>
     <string name="esqueceuSenha_login_cuidador">Esqueceu a senha?</string>
     <string name="entrarBotao_login_cuidador">Entrar</string>
+    <string name="cadastre_se">Não tem cadastro? CADASTRE-SE</string>
 
     /*fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff*/
 
@@ -23,7 +24,7 @@
 
         <string name="label_nome">Nome:</string>
         <string name="label_email">Email:</string>
-        <string name="label_telefone">Telefone:</string>
+        <string name="data_nascimento">Data nascimento:</string>
         <string name="Voce_é">Você é:</string>
 
 

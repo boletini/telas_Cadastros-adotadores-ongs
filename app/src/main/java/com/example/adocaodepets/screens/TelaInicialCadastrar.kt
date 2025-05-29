@@ -20,6 +20,9 @@ import br.senai.sp.jandira.com.example.adocaodepets.R
 
 @Composable
 fun TelaInicialCadastrar(navController: NavController?) {
+    
+    
+
     Column(
         modifier = Modifier
             .fillMaxSize()
