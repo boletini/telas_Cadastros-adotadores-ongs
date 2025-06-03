@@ -1,5 +1,7 @@
 package com.example.adocaodepets.screens
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -23,6 +26,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.com.example.adocaodepets.R
+import com.example.adocaodepets.model.Usuario
+import com.example.adocaodepets.model.UsuarioLogin
+import com.example.adocaodepets.service.RetrofitFactory
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,6 +39,8 @@ fun TelaLogin(navController: NavController?) {
 
     var email by remember { mutableStateOf("") }
     var senha by remember { mutableStateOf("") }
+
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -64,40 +75,47 @@ fun TelaLogin(navController: NavController?) {
 
             // Campo de Email com fundo cinza
 
-                Column (modifier = Modifier
-                    .padding(horizontal = 32.dp)){
-                    OutlinedTextField(
-                        value = email,
-                        onValueChange = { email = it },
-                        label = {
-                            Text(
-                                stringResource(R.string.email_loginCuidador),
-                                fontSize = 18.sp) },
-                        leadingIcon = {
-                            Image(
-                                painter = painterResource(R.drawable.email),
-                                contentDescription = "",
-                                modifier = Modifier.size(30.dp)
-                            )
-                                      },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            containerColor = Color(0xFFD9D9D9)
-                        ),
-                        shape = RoundedCornerShape(9.dp)
-                    )
+            Column(modifier = Modifier.padding(horizontal = 12.dp)) {
 
-                }
-            Spacer(modifier = Modifier.height(12.dp))
+                OutlinedTextField(
+                    value = email,
+                    onValueChange = { email = it },
+                    label = { Text("Email") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Filled.Email,
+                            contentDescription = "Email Icon"
+                        )
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color(0xFFD9D9D9)
+                    ),
+                    shape = RoundedCornerShape(8.dp)
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
 
                 OutlinedTextField(
                     value = senha,
                     onValueChange = { senha = it },
-                    label = { Text(stringResource(R.string.senha_login_cuidador)) },
+                    label = { Text("Senha") },
                     visualTransformation = PasswordVisualTransformation(),
-                    leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = "Lock Icon") },
-                    modifier = Modifier.fillMaxWidth()
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Filled.Lock,
+                            contentDescription = "Lock Icon"
+                        )
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color(0xFFD9D9D9)
+                    ),
+                    shape = RoundedCornerShape(8.dp)
                 )
+            }
+
+
 
             Spacer(modifier = Modifier.height(50.dp))
 
@@ -118,7 +136,44 @@ fun TelaLogin(navController: NavController?) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = {
+                onClick = onClick@{
+                    if (email.isBlank() || senha.isBlank()) {
+                        Toast.makeText(context, "Preencha todos os campos obrigatórios", Toast.LENGTH_SHORT).show()
+                        return@onClick
+                    }
+
+                    val user =  UsuarioLogin (
+                        email = email,
+                        senha = senha
+                    )
+
+                    val call = RetrofitFactory().InsertUsuarioLogin().insertLogin(user)
+
+
+                    call.enqueue(object : Callback<UsuarioLogin> {
+                        override fun onResponse(call: Call<UsuarioLogin>, response: Response<UsuarioLogin>) {
+                            if (response.isSuccessful) {
+                                val loginResponse = response.body()
+                                Toast.makeText(context, "Login realizado com sucesso!", Toast.LENGTH_LONG).show()
+
+
+                                navController?.navigate("tela_inicial_cadastrar")
+                            } else {
+                                Toast.makeText(context, "Erro ao fazer login. Verifique seus dados.", Toast.LENGTH_SHORT).show()
+                                Log.e("API", "Erro ${response.code()}: ${response.errorBody()?.string()}")
+                            }
+                        }
+
+                        override fun onFailure(call: Call<UsuarioLogin>, t: Throwable) {
+                            Toast.makeText(context, "Erro de conexão. Verifique sua internet.", Toast.LENGTH_SHORT).show()
+                            Log.e("API", "Falha na requisição: ${t.message}")
+                        }
+                    })
+
+
+
+
+
                     navController?.navigate("tela_inicial_cadastrar")
                 },
                 shape = RoundedCornerShape(50),

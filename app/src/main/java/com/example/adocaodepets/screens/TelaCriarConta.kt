@@ -42,9 +42,11 @@ fun TelaCriarConta(navController: NavController?) {
     var nome by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var senha by remember { mutableStateOf("") }
+    var endereco by remember { mutableStateOf("") }
     var cnpj by remember {mutableStateOf("")}
     var cpf by remember {mutableStateOf("")}
-    var id_categoria: Int = 0
+    var id_categoria by remember { mutableStateOf(0) }
+
     var data_nascimento by remember { mutableStateOf("") }
 
     val context = LocalContext.current
@@ -303,64 +305,41 @@ fun TelaCriarConta(navController: NavController?) {
             Spacer(modifier = Modifier.height(20.dp))
 
             Button(
-                onClick = {
-                    // Validação simples - se for tutor, cnpj pode ser vazio; se for ong, cpf e data_nascimento podem ser vazios
-                    val isValid = when (opcaoSelecionada.lowercase()) {
-                        "tutor" -> nome.isNotBlank() && email.isNotBlank() && senha.isNotBlank() && data_nascimento.isNotBlank() && cpf.isNotBlank()
-                        "ong" -> nome.isNotBlank() && email.isNotBlank() && senha.isNotBlank() && cnpj.isNotBlank()
-                        else -> false
-                    }
-
-                    if (!isValid || opcaoSelecionada.isBlank()) {
-                        Toast.makeText(
-                            context,
-                            "Preencha todos os campos obrigatórios antes de continuar.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        return@Button
+                onClick = onClick@{
+                    if (nome.isBlank() || email.isBlank() || senha.isBlank() || opcaoSelecionada.isBlank()) {
+                        Toast.makeText(context, "Preencha todos os campos obrigatórios", Toast.LENGTH_SHORT).show()
+                        return@onClick
                     }
 
                     val user = Usuario(
                         nome = nome,
+                        id_categoria = id_categoria,
                         email = email,
                         senha = senha,
+                        endereco = "",
                         data_nascimento = if (opcaoSelecionada.lowercase() == "tutor") data_nascimento else "",
                         cpf = if (opcaoSelecionada.lowercase() == "tutor") cpf else "",
                         cnpj = if (opcaoSelecionada.lowercase() == "ong") cnpj else "",
-                        id_categoria = id_categoria
+
                     )
 
-                    val call = RetrofitFactory().getCadastro_Usuario_Service().insert(user)
+                    val call = RetrofitFactory().InsertCadastro_Usuario_Service().insert(user)
 
-                    call.enqueue(object : retrofit2.Callback<Usuario> {
-                        override fun onResponse(
-                            call: retrofit2.Call<Usuario>,
-                            response: retrofit2.Response<Usuario>
-                        ) {
+                    call.enqueue(object : Callback<Usuario> {
+                        override fun onResponse(call: Call<Usuario>, response: Response<Usuario>) {
                             if (response.isSuccessful) {
+                                Toast.makeText(context, "Cadastro realizado com sucesso!", Toast.LENGTH_LONG).show()
                                 Log.i("API", "Usuário cadastrado com sucesso: ${response.body()}")
-                                Toast.makeText(
-                                    context,
-                                    "Cadastro realizado com sucesso!",
-                                    Toast.LENGTH_LONG
-                                ).show()
                             } else {
-                                Log.e("API", "Erro ao cadastrar: ${response.code()}")
-                                Toast.makeText(
-                                    context,
-                                    "Erro ao cadastrar. Tente novamente.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                Toast.makeText(context, "Erro ao cadastrar. Tente novamente.", Toast.LENGTH_SHORT).show()
+                                Log.e("API", "Erro ao cadastrar: ${response.code()} - ${response.errorBody()?.string()}")
+                                Log.d("API_RESPONSE", response.body()?.toString() ?: "null")
                             }
                         }
 
-                        override fun onFailure(call: retrofit2.Call<Usuario>, t: Throwable) {
+                        override fun onFailure(call: Call<Usuario>, t: Throwable) {
+                            Toast.makeText(context, "Erro de conexão. Verifique sua internet.", Toast.LENGTH_SHORT).show()
                             Log.e("API", "Falha na requisição: ${t.message}")
-                            Toast.makeText(
-                                context,
-                                "Erro de conexão. Verifique sua internet.",
-                                Toast.LENGTH_SHORT
-                            ).show()
                         }
                     })
                 },
