@@ -201,7 +201,7 @@ fun TelaLogin(navController: NavController?) {
                 color = Color.Black,
                 modifier = Modifier
                     .clickable {
-                        navController?.navigate("TelaCriarConta")
+                        navController?.navigate("tela_inicial_cadastrar")
                     }
                     .fillMaxWidth()
                     .padding(end = 8.dp),
