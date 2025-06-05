@@ -1,7 +1,13 @@
 package com.example.adocaodepets.model
 
-class Result (
+data class Result (
     var categorias: List<Categoria>? = null
 )
 
-//data class Resultados()
+data class resultListaAnimal (
+    var animais: List<homeAnimal>? = null
+)
+
+
+
+

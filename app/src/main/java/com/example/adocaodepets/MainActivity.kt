@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.adocaodepets.screens.ListaPetsScreen
 import com.example.adocaodepets.screens.TelaCriarConta
 import com.example.adocaodepets.screens.TelaInicial
 import com.example.adocaodepets.screens.TelaInicialCadastrar
@@ -34,8 +35,12 @@ fun TelaNavigation() {
         startDestination = "tela_inicial"
     ) {
         composable("tela_inicial") {
-            TelaInicial(navController)
+            ListaPetsScreen(navController)
         }
+
+//        composable("tela_inicial") {
+//            TelaInicial(navController)
+//        }
         composable("tela_login") {
             TelaLogin(navController)
         }

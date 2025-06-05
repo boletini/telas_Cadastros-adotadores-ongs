@@ -3,6 +3,7 @@ package com.example.adocaodepets.service
 import com.example.adocaodepets.model.Result
 import com.example.adocaodepets.model.Usuario
 import com.example.adocaodepets.model.UsuarioLogin
+import com.example.adocaodepets.model.resultListaAnimal
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Headers
@@ -26,5 +27,9 @@ interface Cadastro_Usuario_Service {
     @Headers("Content-Type: application/json")
     @POST("login")
     fun insertLogin(@Body usuarioLogin: UsuarioLogin): Call<UsuarioLogin>
+
+    @Headers("Content-Type: application/json")
+    @GET("animal")
+    fun listarAnimais(): Call<resultListaAnimal>
 
 }

@@ -20,3 +20,8 @@ data class Categoria (
     val id : Int = 0,
     val nome_categoria: String = ""
 )
+
+data class homeAnimal (
+    var id: Int = 0,
+    var foto: String = ""
+)

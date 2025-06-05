@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1023395215659",
+    "project_id": "mobile-back-40fb2",
+    "storage_bucket": "mobile-back-40fb2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1023395215659:android:abdbbfa0b96c3e41ceed6e",
+        "android_client_info": {
+          "package_name": "br.senai.sp.jandira.com.example.adocaodepets"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCq9o08GWsu2dHDzCQP8gjPrjaEFlgFA1Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

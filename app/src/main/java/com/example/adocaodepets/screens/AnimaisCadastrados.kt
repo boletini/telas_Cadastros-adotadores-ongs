@@ -1,5 +1,6 @@
 package com.example.adocaodepets.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -22,6 +23,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.com.example.adocaodepets.R
+import com.example.adocaodepets.model.homeAnimal
+import com.example.adocaodepets.model.resultListaAnimal
+import com.example.adocaodepets.screens.components.cardAnimal
+import com.example.adocaodepets.service.RetrofitFactory
+import okhttp3.Call
+import okhttp3.Callback
+import retrofit2.Response
 
 data class Pet(val id: Int, val nome: String, val imagemResId: Int)
 
@@ -31,56 +39,101 @@ fun ListaPetsScreen(navController: NavController?) {
 
     var busca by remember { mutableStateOf(TextFieldValue("")) }
 
-    // Mock de pets (você pode substituir por dados reais da API ou banco de dados)
-    val pets = List(6) {
-        Pet(it, "Pug", R.drawable.image) // imagem deve estar em res/drawable
+    var animalList by remember {
+        mutableStateOf(listOf<homeAnimal>())
     }
+
+    val call = RetrofitFactory().getListaDeAnimais().listarAnimais()
+
+    call.enqueue(object : retrofit2.Callback<resultListaAnimal>{
+        override fun onResponse(call: retrofit2.Call<resultListaAnimal>, response: Response<resultListaAnimal>) {
+            val responseBody = response.body()
+
+            if (responseBody != null) {
+                val animais = responseBody.animais
+                if (animais != null) {
+                    animalList = animais
+                } else {
+                    Log.e("API", "Results veio nulo")
+                }
+            } else {
+                Log.e("API", "Body veio nulo")
+            }
+
+
+        }
+
+        override fun onFailure(p0: retrofit2.Call<resultListaAnimal?>, p1: Throwable) {
+            Log.e("API", "Falha na requisição: ${p1.message}")
+        }
+    })
+
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF8F8DC))
-            .padding(16.dp)
+            .padding(15.dp)
     ) {
-        // Cabeçalho com logo e texto
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(bottom = 16.dp)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.pata), // Substitua pelo logo redondo
+                painter = painterResource(id = R.drawable.logoanimal),
                 contentDescription = "Logo",
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier
+                    .size(80.dp)
+                    .height(30.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = "Lar de Pets",
-                fontSize = 24.sp,
+                text = "Lar de Patas",
+                fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF4E342E)
             )
         }
+
+        Divider(
+            color = Color(0xFF4E342E),
+            thickness = 5.dp,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
 
         // Campo de busca
         OutlinedTextField(
             value = busca,
             onValueChange = { busca = it },
             placeholder = { Text("Pesquise um pet cadastrado") },
-            leadingIcon = {
-                Icon(imageVector = Icons.Default.Search, contentDescription = "Buscar")
+            singleLine = true,
+            trailingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "Buscar",
+                    tint = Color(0xFF4E342E)
+                )
             },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color(0xFF4E342E),
-                unfocusedBorderColor = Color(0xFF4E342E)
+                unfocusedBorderColor = Color(0xFF4E342E),
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black
             ),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
         )
 
+        Divider(
+            color = Color(0xFF4E342E),
+            thickness = 5.dp,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+
         Text(
             text = "PETS CADASTRADOS",
-            fontSize = 20.sp,
+            fontSize = 25.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF4E342E),
             modifier = Modifier.padding(bottom = 8.dp)
@@ -90,46 +143,13 @@ fun ListaPetsScreen(navController: NavController?) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(pets) { pet ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(0.75f),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    elevation = CardDefaults.cardElevation(4.dp)
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(8.dp)
-                    ) {
-                        Image(
-                            painter = painterResource(id = pet.imagemResId),
-                            contentDescription = pet.nome,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(120.dp)
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Button(
-                            onClick = {
-                                // Navegar para mais informações
-                                // navController?.navigate("DetalhesPet/${pet.id}")
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFF4E342E),
-                                contentColor = Color.White
-                            ),
-                            shape = RoundedCornerShape(50),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(text = "MAIS INFORMAÇÕES")
-                        }
-                    }
-                }
+            items(animalList) {
+                cardAnimal(
+                    imageAnimal = it.foto,
+                )
             }
         }
     }
@@ -137,6 +157,6 @@ fun ListaPetsScreen(navController: NavController?) {
 
 @Preview(showSystemUi = true)
 @Composable
-fun ListaPetsScreenPreview() {
-    ListaPetsScreen(null)
+private fun listaPetsScreenPreview() {
+    ListaPetsScreen(navController = null)
 }
