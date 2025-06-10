@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.adocaodepets.screens.ListaPetsScreen
+import com.example.adocaodepets.screens.TelaCadastrarAnimais
 import com.example.adocaodepets.screens.TelaCriarConta
 import com.example.adocaodepets.screens.TelaInicial
 import com.example.adocaodepets.screens.TelaInicialCadastrar

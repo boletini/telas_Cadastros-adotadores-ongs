@@ -1,5 +1,6 @@
 package com.example.adocaodepets.service
 
+import com.example.adocaodepets.model.Animal
 import com.example.adocaodepets.model.Result
 import com.example.adocaodepets.model.Usuario
 import com.example.adocaodepets.model.UsuarioLogin
@@ -31,5 +32,9 @@ interface Cadastro_Usuario_Service {
     @Headers("Content-Type: application/json")
     @GET("animal")
     fun listarAnimais(): Call<resultListaAnimal>
+
+    @Headers("Content-Type: application/json")
+    @POST("animal")
+    fun inserirAnimal(@Body animal: Animal): Call<Animal>
 
 }
