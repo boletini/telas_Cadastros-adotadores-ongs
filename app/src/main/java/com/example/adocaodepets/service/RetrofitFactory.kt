@@ -29,5 +29,13 @@ class RetrofitFactory {
     fun getListaDeAnimais(): Cadastro_Usuario_Service{
         return retrofitFactory.create(Cadastro_Usuario_Service::class.java)
     }
+
+    fun getStatusProcesso(): Cadastro_Usuario_Service{
+        return retrofitFactory.create(Cadastro_Usuario_Service::class.java)
+    }
+
+    fun getStatusTemperamento(): Cadastro_Usuario_Service{
+        return retrofitFactory.create(Cadastro_Usuario_Service::class.java)
+    }
 }
 

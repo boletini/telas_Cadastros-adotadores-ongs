@@ -44,3 +44,13 @@ data class homeAnimal (
     var id: Int = 0,
     var foto: String = ""
 )
+
+data class  homeStatusProcesso (
+    var id: Int = 0,
+    var status_processo: String = ""
+)
+
+data class homeStatusTemperamento (
+    var id: Int = 0,
+    var nome_temperamento: String = ""
+)

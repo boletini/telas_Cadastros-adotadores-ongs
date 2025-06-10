@@ -8,6 +8,12 @@ data class resultListaAnimal (
     var animais: List<homeAnimal>? = null
 )
 
+data class resultListaStatusProcesso (
+    var status_processo: List<homeStatusProcesso>? = null
+)
+data class resltListaTemperamento (
+    var temperamento: List<homeStatusTemperamento>? = null
+)
 
 
 
