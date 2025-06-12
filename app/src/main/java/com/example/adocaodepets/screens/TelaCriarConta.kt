@@ -330,10 +330,23 @@ fun TelaCriarConta(navController: NavController?) {
                             if (response.isSuccessful) {
                                 Toast.makeText(context, "Cadastro realizado com sucesso!", Toast.LENGTH_LONG).show()
                                 Log.i("API", "Usuário cadastrado com sucesso: ${response.body()}")
+                                Log.i("API", "RESPONSE: ${response}")
+                                Log.d("API_RAW", response.raw().toString())
+                                Log.d("API_BODY", response.errorBody()?.string() ?: "null")
+
+                                Log.d("HEADERS", response.headers().toString())
+                                Log.d("BODY_STRING", response.body()?.toString() ?: "Body is null")
+                                Log.d("RAW", response.raw().toString())
+
+
+
+
+
                             } else {
                                 Toast.makeText(context, "Erro ao cadastrar. Tente novamente.", Toast.LENGTH_SHORT).show()
                                 Log.e("API", "Erro ao cadastrar: ${response.code()} - ${response.errorBody()?.string()}")
                                 Log.d("API_RESPONSE", response.body()?.toString() ?: "null")
+
                             }
                         }
 

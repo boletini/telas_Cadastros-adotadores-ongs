@@ -1,5 +1,25 @@
 package com.example.adocaodepets.model
 
+
+data class CategoriaResponse(
+    val id: Int,
+    val nome_categoria: String
+)
+
+data class UsuarioResponse(
+    val id: Int,
+    val nome: String,
+    val email: String,
+    val endereco: String,
+    val cnpj: String,
+    val senha: String,
+    val data_nascimento: String?,
+    val cpf: String,
+    val categorias: List<CategoriaResponse>
+)
+
+
+
 data class Usuario(
     val nome: String,
     val id_categoria: Int,
@@ -27,6 +47,8 @@ data class Animal(
     val id_status_saude: Int,
     val id_usuario: Int
 )
+
+
 
 
 

@@ -36,7 +36,7 @@ fun TelaNavigation() {
         startDestination = "tela_inicial"
     ) {
         composable("tela_inicial") {
-            ListaPetsScreen(navController)
+            TelaCriarConta(navController)
         }
 
 //        composable("tela_inicial") {
