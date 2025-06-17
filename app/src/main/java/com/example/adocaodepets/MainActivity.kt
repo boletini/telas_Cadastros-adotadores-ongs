@@ -36,7 +36,11 @@ fun TelaNavigation() {
         startDestination = "tela_inicial"
     ) {
         composable("tela_inicial") {
-            TelaCriarConta(navController)
+            TelaLogin(navController)
+        }
+
+        composable("tela_inicial_cadastrar_animal") {
+            TelaCadastrarAnimais(navController)
         }
 
 //        composable("tela_inicial") {
@@ -50,6 +54,10 @@ fun TelaNavigation() {
         }
         composable("tela_cadastro") {
             TelaCriarConta(navController)
+        }
+
+        composable("tela-animais-cadastrados") {
+            ListaPetsScreen(navController)
         }
     }
 }

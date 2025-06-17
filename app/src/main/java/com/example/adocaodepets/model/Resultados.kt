@@ -11,9 +11,23 @@ data class resultListaAnimal (
 data class resultListaStatusProcesso (
     var status_processo: List<homeStatusProcesso>? = null
 )
-data class resltListaTemperamento (
-    var temperamento: List<homeStatusTemperamento>? = null
+data class resultListaTemperamento (
+    var temperamentos: List<homeStatusTemperamento>? = null
 )
+
+data class  resultListaVacina (
+    var vacinas: List<homeVacina>? = null
+)
+
+data class resultListaStatusSaude (
+    var status_saude: List<homeStatusSaude>? = null
+)
+
+data class resultListaSexo (
+    var sexo: List<homeSexo>? = null
+)
+
+
 
 
 

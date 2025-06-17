@@ -6,6 +6,17 @@ data class CategoriaResponse(
     val nome_categoria: String
 )
 
+data class LoginResponse (
+    val message: MensagemResponse,
+    val resultUsuario: UsuarioResponse
+)
+
+data class MensagemResponse(
+    val status: Boolean,
+    val status_saude: Int,
+    val message: String
+)
+
 data class UsuarioResponse(
     val id: Int,
     val nome: String,
@@ -14,10 +25,8 @@ data class UsuarioResponse(
     val cnpj: String,
     val senha: String,
     val data_nascimento: String?,
-    val cpf: String,
-    val categorias: List<CategoriaResponse>
+    val cpf: String
 )
-
 
 
 data class Usuario(
@@ -67,7 +76,7 @@ data class homeAnimal (
     var foto: String = ""
 )
 
-data class  homeStatusProcesso (
+data class homeStatusProcesso (
     var id: Int = 0,
     var status_processo: String = ""
 )
@@ -75,4 +84,19 @@ data class  homeStatusProcesso (
 data class homeStatusTemperamento (
     var id: Int = 0,
     var nome_temperamento: String = ""
+)
+
+data class homeVacina (
+    var id: Int = 0,
+    var nome_vacina: String = ""
+)
+
+data class homeSexo (
+    var id: Int = 0,
+    var sexo: String = ""
+)
+
+data class homeStatusSaude (
+    var id: Int = 0,
+    var status_saude: String = ""
 )
