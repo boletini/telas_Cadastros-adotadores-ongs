@@ -168,7 +168,7 @@ fun TelaLogin(navController: NavController?) {
                                     Log.d("API_RESPONSE", "Body: $usuario")
 
                                     Toast.makeText(context, "Login realizado com sucesso!", Toast.LENGTH_LONG).show()
-                                    navController?.navigate("tela_inicial_cadastrar_animal")
+                                    navController?.navigate("tela_home")
                                 } else {
                                     Log.e("API", "Erro: ${response.errorBody()?.string()}")
                                 }
@@ -179,7 +179,7 @@ fun TelaLogin(navController: NavController?) {
                             }
                         })
                     }
-                    navController?.navigate("tela_inicial_cadastrar_animal")
+                    navController?.navigate("tela_home")
                 },
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(

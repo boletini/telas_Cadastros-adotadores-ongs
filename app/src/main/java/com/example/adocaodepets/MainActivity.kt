@@ -10,7 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.adocaodepets.screens.ListaPetsScreen
 import com.example.adocaodepets.screens.TelaCadastrarAnimais
 import com.example.adocaodepets.screens.TelaCriarConta
-import com.example.adocaodepets.screens.TelaInicial
+import com.example.adocaodepets.screens.TelaHome
 import com.example.adocaodepets.screens.TelaInicialCadastrar
 import com.example.adocaodepets.screens.TelaLogin
 import com.example.adocaodepets.ui.theme.AdoçaoDePetsTheme
@@ -38,26 +38,27 @@ fun TelaNavigation() {
         composable("tela_inicial") {
             TelaLogin(navController)
         }
-
-        composable("tela_inicial_cadastrar_animal") {
+        composable("tela_home") {
+            TelaHome(navController)
+        }
+//
+        composable("tela_cadastrar_animais") {
             TelaCadastrarAnimais(navController)
         }
-
-//        composable("tela_inicial") {
-//            TelaInicial(navController)
-//        }
-        composable("tela_login") {
-            TelaLogin(navController)
+        composable("tela_animais_cadastrados") {
+            ListaPetsScreen(navController)
         }
         composable("tela_inicial_cadastrar") {
             TelaInicialCadastrar(navController)
         }
-        composable("tela_cadastro") {
+        composable("tela_criar_conta") {
             TelaCriarConta(navController)
         }
+//
 
         composable("tela-animais-cadastrados") {
             ListaPetsScreen(navController)
         }
+//
     }
 }

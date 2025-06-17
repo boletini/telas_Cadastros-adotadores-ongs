@@ -62,9 +62,10 @@ fun TelaCadastrarAnimais(navController: NavController?) {
     var nome by remember { mutableStateOf("") }
     var descricao by remember { mutableStateOf("") }
     var status by remember { mutableStateOf("") } // String para o TextField
-    var sexo by remember { mutableStateOf("") }
+
     var idade by remember { mutableStateOf("") }
     var raca by remember { mutableStateOf("") }
+
     var fotoUrl by remember { mutableStateOf<String?> (null)  }
     var contato_do_dono by remember { mutableStateOf("") }
     var temperamento by remember { mutableStateOf("") } // String para o TextField
@@ -589,7 +590,7 @@ fun TelaCadastrarAnimais(navController: NavController?) {
                                                 text = { Text(sexo.sexo) },
                                                 onClick = {
                                                     opcaoSelecionadaSexo = sexo.sexo
-                                                    id_vacina = sexo.id
+                                                    id_sexo = sexo.id
                                                     expandedSexo = false
                                                 }
                                             )
@@ -600,68 +601,71 @@ fun TelaCadastrarAnimais(navController: NavController?) {
                         }
                         Spacer(modifier = Modifier.height(10.dp))
 
+                        // RAÇA (código que você forneceu)
                         Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
                                 text = "RAÇA:",
                                 fontSize = 14.sp,
-                                modifier = Modifier
-                                    .padding(bottom = 5.dp)
+                                modifier = Modifier.padding(bottom = 5.dp),
+                                color = Color(0xFF4E342E) // Cor do texto da label
                             )
+
                             OutlinedTextField(
                                 value = raca,
-                                onValueChange = {raca = it},
+                                onValueChange = { raca = it },
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(34.dp),
                                 shape = RoundedCornerShape(10.dp),
                                 colors = OutlinedTextFieldDefaults.colors(
-                                    unfocusedLabelColor = Color(color = 0xFF4E342E),
-                                    focusedContainerColor = Color(color = 0xFFFFF8E1),
-                                    focusedBorderColor = Color(color = 0xFF4E342E),
-                                    unfocusedBorderColor = Color(color = 0xFF4E342E)
+                                    unfocusedLabelColor = Color(0xFF4E342E),
+                                    focusedContainerColor = Color(0xFFFFF8E1),
+                                    focusedBorderColor = Color(0xFF4E342E),
+                                    unfocusedBorderColor = Color(0xFF4E342E)
                                 ),
                                 textStyle = TextStyle(
-                                    fontSize = 15.sp,
-                                    textAlign = TextAlign.Center // alinhamento horizontal do texto
+                                    fontSize = 11.sp, // Reduzido para caber bem em 34.dp
+                                    textAlign = TextAlign.Start // Melhor visibilidade
                                 ),
-                                singleLine = true // evita quebra de linha
+                                singleLine = true
                             )
+
                         }
                         Spacer(modifier = Modifier.height(10.dp))
 
+                        // CONTATO DO DONO (código que você forneceu)
                         Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth()
 
                         ) {
                             Text(
                                 text = "CONTATO DO DONO:",
                                 fontSize = 14.sp,
-                                modifier = Modifier
-                                    .padding(bottom = 5.dp)
+                                modifier = Modifier.padding(bottom = 5.dp),
+                                color = Color(0xFF4E342E) // Cor do texto da label
                             )
                             OutlinedTextField(
                                 value = contato_do_dono,
-                                onValueChange = {contato_do_dono = it},
+                                onValueChange = { contato_do_dono = it },
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(34.dp),
                                 shape = RoundedCornerShape(10.dp),
                                 colors = OutlinedTextFieldDefaults.colors(
-                                    unfocusedLabelColor = Color(color = 0xFF4E342E),
-                                    focusedContainerColor = Color(color = 0xFFFFF8E1),
-                                    focusedBorderColor = Color(color = 0xFF4E342E),
-                                    unfocusedBorderColor = Color(color = 0xFF4E342E)
+                                    unfocusedLabelColor = Color(0xFF4E342E),
+                                    focusedContainerColor = Color(0xFFFFF8E1),
+                                    focusedBorderColor = Color(0xFF4E342E),
+                                    unfocusedBorderColor = Color(0xFF4E342E)
                                 ),
                                 textStyle = TextStyle(
-                                    fontSize = 15.sp,
-                                    textAlign = TextAlign.Center // alinhamento horizontal do texto
+                                    fontSize = 11.sp, // Reduzido para evitar corte
+                                    textAlign = TextAlign.Start
                                 ),
-                                singleLine = true // evita quebra de linha
+                                singleLine = true
                             )
+
                         }
 
                         Spacer(modifier = Modifier.height(10.dp))
@@ -772,8 +776,10 @@ fun TelaCadastrarAnimais(navController: NavController?) {
             Button(
                 onClick = onClick@{
                     // 1. Validação dos campos
-                    if (nome.isBlank() || idade.isBlank() || sexo.isBlank() || raca.isBlank() ||
-                        contato_do_dono.isBlank() || descricao.isBlank() ) { // Adicionei descricao
+                    if (nome.isBlank() || idade.isBlank() ||  raca.isBlank() ||
+                        contato_do_dono.isBlank() || descricao.isBlank() ) {
+                        // Adicionei descricao
+                        Log.d("COISAS FALTANDO", "$nome,$idade,$id_sexo,$raca,$contato_do_dono,$descricao")
                         Toast.makeText(context, "Preencha todos os campos textuais obrigatórios.", Toast.LENGTH_LONG).show()
                         return@onClick
                     }
@@ -787,13 +793,13 @@ fun TelaCadastrarAnimais(navController: NavController?) {
                     val animal = Animal(
                         nome = nome,
                         idade = idade,
-                        sexo = sexo,
                         raca = raca,
                         especie = especie, // Preencha com valor real se tiver
                         foto = fotoUrl!!, // Já é String?, então está ok aqui, fotoUrl é String?
                         localizacao = "dsadwadsdaf", // Preencha com valor real se tiver
                         celular_responsavel = contato_do_dono,
-                        id_status_processo = id_status_processo, // Agora é Int (não Int?)
+                        id_sexo = id_sexo,
+                        id_status_processo = 1, // Agora é Int (não Int?)
                         id_temperamento = id_temperamento,     // Agora é Int (não Int?)
                         id_vacina = id_vacina,               // Agora é Int (não Int?)
                         id_status_saude = id_status_saude, // Assumindo que este é sempre 1 por enquanto
@@ -816,7 +822,7 @@ fun TelaCadastrarAnimais(navController: NavController?) {
                                 nome = ""
                                 descricao = ""
                                 status = ""
-                                sexo = ""
+                                id_sexo = 0
                                 idade = ""
                                 raca = ""
                                 fotoUrl = null
@@ -889,7 +895,7 @@ private fun uploadSelectedImageToAzure(
         }
 
         val storageAccount = "imgemurl"
-        val sasToken = "sp=racwdli&st=2025-06-10T16:53:42Z&se=2025-06-11T00:53:42Z&sv=2024-11-04&sr=c&sig=ZXlwKgWS1v2HlefgV8z5nCym2U3GN6SFnkV91cmnlzs%3D"
+        val sasToken = "sp=racwl&st=2025-06-17T12:19:06Z&se=2025-06-19T20:19:06Z&sv=2024-11-04&sr=c&sig=%2F8zQ9OCzPsjJMsEwq2fIBSjdWB4IlBIZGMAR%2BnQqQFs%3D"
         val containerName = "fotos"
 
         val uploadParams = UploadParams(file, storageAccount, sasToken, containerName)

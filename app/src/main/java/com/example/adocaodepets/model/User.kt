@@ -44,12 +44,12 @@ data class Usuario(
 data class Animal(
     val nome: String,
     val idade: String,
-    val sexo: String,
     val raca: String,
     val especie: String,
     val foto: String,
     val localizacao: String,
     val celular_responsavel: String,
+    val id_sexo: Int,
     val id_status_processo: Int,
     val id_temperamento: Int,
     val id_vacina: Int,

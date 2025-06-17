@@ -70,7 +70,7 @@ fun TelaInicialCadastrar(navController: NavController?) {
 
         // Botão “Cadastrar”
         Button(
-            onClick = { navController?.navigate("tela_cadastro") },
+            onClick = { navController?.navigate("tela_criar_conta") },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF4E342E)   // marrom
             ),

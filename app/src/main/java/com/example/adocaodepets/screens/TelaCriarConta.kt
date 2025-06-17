@@ -296,7 +296,7 @@ fun TelaCriarConta(navController: NavController?) {
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .clickable {
-                            navController?.navigate("tela_login")
+                            navController?.navigate("tela_inicial")
                         }
                         .padding(horizontal = 5.dp)
                 )
