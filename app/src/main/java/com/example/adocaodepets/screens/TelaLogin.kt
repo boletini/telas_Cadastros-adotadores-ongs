@@ -26,9 +26,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.com.example.adocaodepets.R
+import com.example.adocaodepets.model.LoginResponse
 import com.example.adocaodepets.model.Usuario
 import com.example.adocaodepets.model.UsuarioLogin
+import com.example.adocaodepets.model.UsuarioResponse
 import com.example.adocaodepets.service.RetrofitFactory
+import org.junit.runner.manipulation.Ordering.Context
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -41,6 +44,10 @@ fun TelaLogin(navController: NavController?) {
     var senha by remember { mutableStateOf("") }
 
     val context = LocalContext.current
+
+    val sharedUserId = context.getSharedPreferences("usuarios",android.content.Context.MODE_PRIVATE)
+    val editor = sharedUserId.edit()
+    val userId = sharedUserId.getInt("user_id",0)
 
     Box(
         modifier = Modifier
@@ -140,41 +147,39 @@ fun TelaLogin(navController: NavController?) {
                     if (email.isBlank() || senha.isBlank()) {
                         Toast.makeText(context, "Preencha todos os campos obrigatórios", Toast.LENGTH_SHORT).show()
                         return@onClick
-                    }
+                    }else{
+                        val user = UsuarioLogin(
+                            email = email,
+                            senha = senha
+                        )
 
-                    val user =  UsuarioLogin (
-                        email = email,
-                        senha = senha
-                    )
+                        val call = RetrofitFactory().InsertUsuarioLogin().insertLogin(user)
 
-                    val call = RetrofitFactory().InsertUsuarioLogin().insertLogin(user)
+                        call.enqueue(object : Callback<LoginResponse> {
+                            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                                if (response.isSuccessful) {
+                                    val usuario = response.body()?.resultUsuario
+                                    val id = usuario?.id
 
+                                    // Salvando em SharedPreferences, por exemplo
+                                    val editor = context.getSharedPreferences("usuarios", android.content.Context.MODE_PRIVATE).edit()
+                                    editor.putInt("user_id", id ?: 0)
+                                    editor.apply()
+                                    Log.d("API_RESPONSE", "Body: $usuario")
 
-                    call.enqueue(object : Callback<UsuarioLogin> {
-                        override fun onResponse(call: Call<UsuarioLogin>, response: Response<UsuarioLogin>) {
-                            if (response.isSuccessful) {
-                                val loginResponse = response.body()
-                                Toast.makeText(context, "Login realizado com sucesso!", Toast.LENGTH_LONG).show()
-
-
-                                navController?.navigate("tela_inicial_cadastrar")
-                            } else {
-                                Toast.makeText(context, "Erro ao fazer login. Verifique seus dados.", Toast.LENGTH_SHORT).show()
-                                Log.e("API", "Erro ${response.code()}: ${response.errorBody()?.string()}")
+                                    Toast.makeText(context, "Login realizado com sucesso!", Toast.LENGTH_LONG).show()
+                                    navController?.navigate("tela_inicial_cadastrar_animal")
+                                } else {
+                                    Log.e("API", "Erro: ${response.errorBody()?.string()}")
+                                }
                             }
-                        }
 
-                        override fun onFailure(call: Call<UsuarioLogin>, t: Throwable) {
-                            Toast.makeText(context, "Erro de conexão. Verifique sua internet.", Toast.LENGTH_SHORT).show()
-                            Log.e("API", "Falha na requisição: ${t.message}")
-                        }
-                    })
-
-
-
-
-
-                    navController?.navigate("tela_inicial_cadastrar")
+                            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                                Log.e("API", "Falha: ${t.message}")
+                            }
+                        })
+                    }
+                    navController?.navigate("tela_inicial_cadastrar_animal")
                 },
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(

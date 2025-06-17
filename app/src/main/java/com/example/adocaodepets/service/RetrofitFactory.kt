@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 //
 
 class RetrofitFactory {
-    private val BASE_URL = "http://10.107.134.13:8080/v1/controle-pet/" //url
+    private val BASE_URL = "http://192.168.18.30:8080/v1/controle-pet/" //url
 
     private val retrofitFactory = Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(
         GsonConverterFactory.create()).build()
@@ -34,8 +34,21 @@ class RetrofitFactory {
         return retrofitFactory.create(Cadastro_Usuario_Service::class.java)
     }
 
-    fun getStatusTemperamento(): Cadastro_Usuario_Service{
+
+    fun getTemperamento(): Cadastro_Usuario_Service{
+        return  retrofitFactory.create(Cadastro_Usuario_Service::class.java)
+    }
+
+    fun getVacina(): Cadastro_Usuario_Service{
         return retrofitFactory.create(Cadastro_Usuario_Service::class.java)
+    }
+
+    fun getStatusSaude(): Cadastro_Usuario_Service{
+        return  retrofitFactory.create(Cadastro_Usuario_Service::class.java)
+    }
+
+    fun getSexo(): Cadastro_Usuario_Service {
+        return  retrofitFactory.create(Cadastro_Usuario_Service::class.java)
     }
 }
 

@@ -11,6 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -29,6 +30,16 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.com.example.adocaodepets.R
 import com.example.adocaodepets.model.Animal // Importar seu modelo Animal
+import com.example.adocaodepets.model.Categoria
+import com.example.adocaodepets.model.Result
+import com.example.adocaodepets.model.homeSexo
+import com.example.adocaodepets.model.homeStatusSaude
+import com.example.adocaodepets.model.homeStatusTemperamento
+import com.example.adocaodepets.model.homeVacina
+import com.example.adocaodepets.model.resultListaSexo
+import com.example.adocaodepets.model.resultListaStatusSaude
+import com.example.adocaodepets.model.resultListaTemperamento
+import com.example.adocaodepets.model.resultListaVacina
 import com.example.adocaodepets.service.RetrofitFactory
 import com.example.adocaodepets.service.UploadParams
 import com.example.adocaodepets.service.uploadImageToAzure
@@ -58,12 +69,169 @@ fun TelaCadastrarAnimais(navController: NavController?) {
     var contato_do_dono by remember { mutableStateOf("") }
     var temperamento by remember { mutableStateOf("") } // String para o TextField
     var vacina by remember { mutableStateOf("") } // String para o TextField
+    var especie by remember { mutableStateOf("")  }
+
 
     var showProgressDialog by remember { mutableStateOf(false) }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+
+
+    var expandedSexo by remember { mutableStateOf(false) }
+    var expandedTemperamento by remember { mutableStateOf(false) }
+    var expandedSaude by remember { mutableStateOf(false) }
+    var expandedEspecie by remember { mutableStateOf(false) }
+    var expandedVacina by remember { mutableStateOf(false) }
+
+    // Variaveis que guardam o id
+    var id_status_processo by remember { mutableStateOf(0) }
+    var id_temperamento by remember { mutableStateOf(0) }
+    var id_vacina by remember { mutableStateOf(0) }
+    var id_status_saude by remember { mutableStateOf(0) }
+    var id_sexo by remember { mutableStateOf(0) }
+
+
+
+    // Variaveis que pegam o get
+    var statusSaudeList by remember {
+        mutableStateOf(listOf<homeStatusSaude>())
+    }
+
+    var temperamentoList by remember {
+        mutableStateOf(listOf<homeStatusTemperamento>())
+    }
+
+    var sexoList by remember {
+        mutableStateOf(listOf<homeSexo>())
+    }
+
+    // fazer get da raça
+
+    var vacinaList by remember {
+        mutableStateOf(listOf<homeVacina>())
+    }
+
+    val opcoesEspecie = listOf("Cachorro", "Gato")
+
+
+    // Variaveis que guardam a opcao selecionada de cada campo
+    var opcaoSelecionadaTemperamento by remember { mutableStateOf("") }
+    var opcaoSelecionadaStatusSaude by remember { mutableStateOf(value = "") }
+    var opcaoSelecionadaVacina by remember { mutableStateOf(value = "") }
+    var opcaoSelecionadaRaca by remember { mutableStateOf(value = "") }
+    var opcaoSelecionadaSexo by remember { mutableStateOf(value = "") }
+    var opcaoSelecionadaEspecie by remember { mutableStateOf(value = "") }
+
+    val sharedPreferences = context.getSharedPreferences("usuarios", Context.MODE_PRIVATE)
+    val userId = sharedPreferences.getInt("user_id", 0)
+
+    // CHAMADA PARA O GET DO SEXO
+    val call = RetrofitFactory().getSexo().listarSexo()
+    call.enqueue(object : Callback<resultListaSexo>{
+        override fun onResponse(call: Call<resultListaSexo>, response: Response<resultListaSexo>) {
+            val responseBody = response.body()
+
+            if (responseBody != null) {
+                val sexos = responseBody.sexo
+                if (sexos != null) {
+                    sexoList = sexos
+                } else {
+                    Log.e("API", "Results veio nulo")
+                }
+            } else {
+                Log.e("API", "Body veio nulo")
+            }
+
+
+        }
+
+        override fun onFailure(call: Call<resultListaSexo>, t: Throwable) {
+            Log.e("API", "Falha na requisição: ${t.message}")
+
+        }
+
+    })
+
+
+    // CHAMADA PARA O GET DO TEMPERAMENTO
+    val callTemperamento = RetrofitFactory().getTemperamento().listarStatusTemperamento()
+    callTemperamento.enqueue(object : Callback<resultListaTemperamento>{
+        override fun onResponse(call: Call<resultListaTemperamento>, response: Response<resultListaTemperamento>) {
+            val responseBody = response.body()
+
+            if (responseBody != null) {
+                val temper = responseBody.temperamentos
+                if (temper != null) {
+                    temperamentoList = temper
+                } else {
+                    Log.e("API", "resultListaTemperamento veio nulo")
+                }
+            } else {
+                Log.e("API", "Body veio nulo")
+            }
+        }
+
+        override fun onFailure(call: Call<resultListaTemperamento>, t: Throwable) {
+            Log.e("API", "Falha na requisição: ${t.message}")
+        }
+    })
+
+    // CHAMADA PARA O GET DA VACINA
+    val callVacina = RetrofitFactory().getVacina().listarVacina()
+    callVacina.enqueue(object : Callback<resultListaVacina>{
+        override fun onResponse(call: Call<resultListaVacina>, response: Response<resultListaVacina>) {
+            val responseBody = response.body()
+
+            if (responseBody != null) {
+                val vac = responseBody.vacinas
+                if (vac != null) {
+                    vacinaList = vac
+                } else {
+                    Log.e("API", "resultListaVacina veio nulo")
+                }
+            } else {
+                Log.e("API", "Body veio nulo")
+            }
+        }
+
+        override fun onFailure(call: Call<resultListaVacina>, t: Throwable) {
+            Log.e("API", "Falha na requisição: ${t.message}")
+        }
+    })
+
+    val callStatusSaude = RetrofitFactory().getStatusSaude().listarStatusSaude()
+    callStatusSaude.enqueue(object : Callback<resultListaStatusSaude>{
+        override fun onResponse(call: Call<resultListaStatusSaude>, response: Response<resultListaStatusSaude>) {
+            val responseBody = response.body()
+
+            if (responseBody != null) {
+                val statusSaude = responseBody.status_saude
+                if (statusSaude != null) {
+                    statusSaudeList = statusSaude
+                } else {
+                    Log.e("API", "resultListaVacina veio nulo")
+                }
+            } else {
+                Log.e("API", "Body veio nulo")
+            }
+        }
+
+        override fun onFailure(call: Call<resultListaStatusSaude>, t: Throwable) {
+            Log.e("API", "Falha na requisição: ${t.message}")
+        }
+    })
+
+
+
+
+
+
+
+
+
+
 
     val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         imageUri = uri
@@ -79,6 +247,7 @@ fun TelaCadastrarAnimais(navController: NavController?) {
             }
         }
     }
+
 
     Box(
         modifier = Modifier
@@ -227,7 +396,7 @@ fun TelaCadastrarAnimais(navController: NavController?) {
                                 onValueChange = {descricao = it},
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(150.dp),
+                                    .height(164.dp),
                                 shape = RoundedCornerShape(10.dp),
                                 colors = OutlinedTextFieldDefaults.colors(
                                     unfocusedLabelColor = Color(color = 0xFF4E342E),
@@ -243,27 +412,51 @@ fun TelaCadastrarAnimais(navController: NavController?) {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .padding(top = 25.dp)
                         ) {
-                            Text(
-                                text = "STATUS (ID):", // Indicando que é um ID
-                                fontSize = 14.sp,
-                                modifier = Modifier.padding(bottom = 5.dp)
-                            )
-                            OutlinedTextField(
-                                value = status,
-                                onValueChange = {status = it},
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(55.dp),
-                                shape = RoundedCornerShape(10.dp),
-                                colors = OutlinedTextFieldDefaults.colors(
-                                    unfocusedLabelColor = Color(color = 0xFF4E342E),
-                                    focusedContainerColor = Color(color = 0xFFFFF8E1),
-                                    focusedBorderColor = Color(color = 0xFF4E342E),
-                                    unfocusedBorderColor = Color(color = 0xFF4E342E)
-                                ),
-                                textStyle = TextStyle(fontSize = 15.sp)
-                            )
+                            Text("SAÚDE:", fontSize = 14.sp,modifier = Modifier
+                                .padding(bottom = 5.dp))
+                            ExposedDropdownMenuBox(
+                                expanded = expandedSaude,
+                                onExpandedChange = { expandedSaude = !expandedSaude }
+                            ) {
+                                OutlinedTextField(
+                                    value = opcaoSelecionadaStatusSaude,
+                                    onValueChange = { },
+                                    readOnly = true,
+                                    trailingIcon = {
+                                        Icon(
+                                            imageVector = Icons.Filled.ArrowDropDown,
+                                            contentDescription = null,
+                                            modifier = Modifier.size(30.dp)
+                                        )
+                                    },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(34.dp)
+                                        .menuAnchor(),
+                                    colors = OutlinedTextFieldDefaults.colors(
+                                        focusedBorderColor = Color(0xFFD9D9D9)
+                                    ),
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+
+                                ExposedDropdownMenu(
+                                    expanded = expandedSaude,
+                                    onDismissRequest = { expandedSaude = false }
+                                ) {
+                                    statusSaudeList.forEach { statusSaude ->
+                                        DropdownMenuItem(
+                                            text = { Text(statusSaude.status_saude) },
+                                            onClick = {
+                                                opcaoSelecionadaStatusSaude = statusSaude.status_saude
+                                                id_status_saude = statusSaude.id
+                                                expandedSaude = false
+                                            }
+                                        )
+                                    }
+                                }
+                            }
                         }
                         Spacer(modifier = Modifier.height(10.dp))
 
@@ -271,26 +464,49 @@ fun TelaCadastrarAnimais(navController: NavController?) {
                             modifier = Modifier
                                 .fillMaxWidth()
                         ) {
-                            Text(
-                                text = "TEMPERAMENTO (ID):", // Indicando que é um ID
-                                fontSize = 14.sp,
-                                modifier = Modifier.padding(bottom = 5.dp)
-                            )
-                            OutlinedTextField(
-                                value = temperamento,
-                                onValueChange = {temperamento = it},
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(55.dp),
-                                shape = RoundedCornerShape(10.dp),
-                                colors = OutlinedTextFieldDefaults.colors(
-                                    unfocusedLabelColor = Color(color = 0xFF4E342E),
-                                    focusedContainerColor = Color(color = 0xFFFFF8E1),
-                                    focusedBorderColor = Color(color = 0xFF4E342E),
-                                    unfocusedBorderColor = Color(color = 0xFF4E342E)
-                                ),
-                                textStyle = TextStyle(fontSize = 15.sp)
-                            )
+                            Text("ESPÉCIE:", fontSize = 14.sp, modifier = Modifier.padding(bottom = 5.dp))
+
+                            ExposedDropdownMenuBox(
+                                expanded = expandedEspecie,
+                                onExpandedChange = { expandedEspecie = !expandedEspecie }
+                            ) {
+                                OutlinedTextField(
+                                    value = opcaoSelecionadaEspecie,
+                                    onValueChange = { },
+                                    readOnly = true,
+                                    trailingIcon = {
+                                        Icon(
+                                            imageVector = Icons.Filled.ArrowDropDown,
+                                            contentDescription = null,
+                                            modifier = Modifier.size(25.dp)
+                                        )
+                                    },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(34.dp)
+                                        .menuAnchor(),
+                                    colors = OutlinedTextFieldDefaults.colors(
+                                        focusedBorderColor = Color(0xFFD9D9D9)
+                                    ),
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+
+                                ExposedDropdownMenu(
+                                    expanded = expandedEspecie,
+                                    onDismissRequest = { expandedEspecie = false }
+                                ) {
+                                    opcoesEspecie.forEach { especieItem ->
+                                        DropdownMenuItem(
+                                            text = { Text(especieItem) },
+                                            onClick = {
+                                                opcaoSelecionadaEspecie = especieItem
+                                                expandedEspecie = false
+                                                especie = especieItem
+                                            }
+                                        )
+                                    }
+                                }
+                            }
                         }
                     }
                     Spacer(modifier = Modifier.width(10.dp))
@@ -336,27 +552,50 @@ fun TelaCadastrarAnimais(navController: NavController?) {
                                     .weight(1f)
                                     .padding(start = 5.dp)
                             ) {
-                                Text(
-                                    text = "SEXO:",
-                                    fontSize = 14.sp,
-                                    modifier = Modifier
-                                        .padding(bottom = 5.dp)
-                                )
-                                OutlinedTextField(
-                                    value = sexo,
-                                    onValueChange = {sexo = it},
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(55.dp),
-                                    shape = RoundedCornerShape(10.dp),
-                                    colors = OutlinedTextFieldDefaults.colors(
-                                        unfocusedLabelColor = Color(color = 0xFF4E342E),
-                                        focusedContainerColor = Color(color = 0xFFFFF8E1),
-                                        focusedBorderColor = Color(color = 0xFF4E342E),
-                                        unfocusedBorderColor = Color(color = 0xFF4E342E)
-                                    ),
-                                    textStyle = TextStyle(fontSize = 15.sp)
-                                )
+                                Text("SEXO:", fontSize = 14.sp,modifier = Modifier
+                                    .padding(bottom = 5.dp))
+                                ExposedDropdownMenuBox(
+                                    expanded = expandedSexo,
+                                    onExpandedChange = { expandedSexo = !expandedSexo }
+                                ) {
+                                    OutlinedTextField(
+                                        value = opcaoSelecionadaSexo,
+                                        onValueChange = { },
+                                        readOnly = true,
+                                        trailingIcon = {
+                                            Icon(
+                                                imageVector = Icons.Filled.ArrowDropDown,
+                                                contentDescription = null,
+                                                modifier = Modifier.size(30.dp)
+                                            )
+                                        },
+
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .menuAnchor()
+                                            .height(55.dp),
+                                        colors = OutlinedTextFieldDefaults.colors(
+                                            focusedBorderColor = Color(0xFFD9D9D9)
+                                        ),
+                                        shape = RoundedCornerShape(8.dp)
+                                    )
+
+                                    ExposedDropdownMenu(
+                                        expanded = expandedSexo,
+                                        onDismissRequest = { expandedSexo = false }
+                                    ) {
+                                        sexoList.forEach { sexo ->
+                                            DropdownMenuItem(
+                                                text = { Text(sexo.sexo) },
+                                                onClick = {
+                                                    opcaoSelecionadaSexo = sexo.sexo
+                                                    id_vacina = sexo.id
+                                                    expandedSexo = false
+                                                }
+                                            )
+                                        }
+                                    }
+                                }
                             }
                         }
                         Spacer(modifier = Modifier.height(10.dp))
@@ -376,7 +615,7 @@ fun TelaCadastrarAnimais(navController: NavController?) {
                                 onValueChange = {raca = it},
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(55.dp),
+                                    .height(34.dp),
                                 shape = RoundedCornerShape(10.dp),
                                 colors = OutlinedTextFieldDefaults.colors(
                                     unfocusedLabelColor = Color(color = 0xFF4E342E),
@@ -384,7 +623,11 @@ fun TelaCadastrarAnimais(navController: NavController?) {
                                     focusedBorderColor = Color(color = 0xFF4E342E),
                                     unfocusedBorderColor = Color(color = 0xFF4E342E)
                                 ),
-                                textStyle = TextStyle(fontSize = 15.sp)
+                                textStyle = TextStyle(
+                                    fontSize = 15.sp,
+                                    textAlign = TextAlign.Center // alinhamento horizontal do texto
+                                ),
+                                singleLine = true // evita quebra de linha
                             )
                         }
                         Spacer(modifier = Modifier.height(10.dp))
@@ -405,7 +648,7 @@ fun TelaCadastrarAnimais(navController: NavController?) {
                                 onValueChange = {contato_do_dono = it},
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(55.dp),
+                                    .height(34.dp),
                                 shape = RoundedCornerShape(10.dp),
                                 colors = OutlinedTextFieldDefaults.colors(
                                     unfocusedLabelColor = Color(color = 0xFF4E342E),
@@ -413,8 +656,64 @@ fun TelaCadastrarAnimais(navController: NavController?) {
                                     focusedBorderColor = Color(color = 0xFF4E342E),
                                     unfocusedBorderColor = Color(color = 0xFF4E342E)
                                 ),
-                                textStyle = TextStyle(fontSize = 15.sp)
+                                textStyle = TextStyle(
+                                    fontSize = 15.sp,
+                                    textAlign = TextAlign.Center // alinhamento horizontal do texto
+                                ),
+                                singleLine = true // evita quebra de linha
                             )
+                        }
+
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+
+                        ) {
+                            Text("TEMPERAMENTO:", fontSize = 14.sp,modifier = Modifier
+                                .padding(bottom = 5.dp))
+                            ExposedDropdownMenuBox(
+                                expanded = expandedTemperamento,
+                                onExpandedChange = { expandedTemperamento = !expandedTemperamento }
+                            ) {
+                                OutlinedTextField(
+                                    value = opcaoSelecionadaTemperamento,
+                                    onValueChange = { },
+                                    readOnly = true,
+                                    trailingIcon = {
+                                        Icon(
+                                            imageVector = Icons.Filled.ArrowDropDown,
+                                            contentDescription = null,
+                                            modifier = Modifier.size(30.dp)
+                                        )
+                                    },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(34.dp)
+                                        .menuAnchor(),
+                                    colors = OutlinedTextFieldDefaults.colors(
+                                        focusedBorderColor = Color(0xFFD9D9D9)
+                                    ),
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+
+                                ExposedDropdownMenu(
+                                    expanded = expandedTemperamento,
+                                    onDismissRequest = { expandedTemperamento = false }
+                                ) {
+                                    temperamentoList.forEach { temperamento ->
+                                        DropdownMenuItem(
+                                            text = { Text(temperamento.nome_temperamento) },
+                                            onClick = {
+                                                opcaoSelecionadaTemperamento = temperamento.nome_temperamento
+                                                id_temperamento = temperamento.id
+                                                expandedTemperamento = false
+                                            }
+                                        )
+                                    }
+                                }
+                            }
                         }
                         Spacer(modifier = Modifier.height(10.dp))
 
@@ -423,27 +722,49 @@ fun TelaCadastrarAnimais(navController: NavController?) {
                                 .fillMaxWidth()
 
                         ) {
-                            Text(
-                                text = "VACINAS (ID):", // Indicando que é um ID
-                                fontSize = 14.sp,
-                                modifier = Modifier
-                                    .padding(bottom = 5.dp)
-                            )
-                            OutlinedTextField(
-                                value = vacina,
-                                onValueChange = {vacina = it},
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(55.dp),
-                                shape = RoundedCornerShape(10.dp),
-                                colors = OutlinedTextFieldDefaults.colors(
-                                    unfocusedLabelColor = Color(color = 0xFF4E342E),
-                                    focusedContainerColor = Color(color = 0xFFFFF8E1),
-                                    focusedBorderColor = Color(color = 0xFF4E342E),
-                                    unfocusedBorderColor = Color(color = 0xFF4E342E)
-                                ),
-                                textStyle = TextStyle(fontSize = 15.sp)
-                            )
+                            Text("VACINA:", fontSize = 14.sp,modifier = Modifier
+                                .padding(bottom = 5.dp))
+                            ExposedDropdownMenuBox(
+                                expanded = expandedVacina,
+                                onExpandedChange = { expandedVacina = !expandedVacina }
+                            ) {
+                                OutlinedTextField(
+                                    value = opcaoSelecionadaVacina,
+                                    onValueChange = { },
+                                    readOnly = true,
+                                    trailingIcon = {
+                                        Icon(
+                                            imageVector = Icons.Filled.ArrowDropDown,
+                                            contentDescription = null,
+                                            modifier = Modifier.size(30.dp)
+                                        )
+                                    },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(34.dp)
+                                        .menuAnchor(),
+                                    colors = OutlinedTextFieldDefaults.colors(
+                                        focusedBorderColor = Color(0xFFD9D9D9)
+                                    ),
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+
+                                ExposedDropdownMenu(
+                                    expanded = expandedVacina,
+                                    onDismissRequest = { expandedVacina = false }
+                                ) {
+                                    vacinaList.forEach { vacina ->
+                                        DropdownMenuItem(
+                                            text = { Text(vacina.nome_vacina) },
+                                            onClick = {
+                                                opcaoSelecionadaVacina = vacina.nome_vacina
+                                                id_vacina = vacina.id
+                                                expandedVacina = false
+                                            }
+                                        )
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -457,47 +778,26 @@ fun TelaCadastrarAnimais(navController: NavController?) {
                         return@onClick
                     }
 
-                    // 2. Validar e converter IDs que devem ser Int
-                    val idStatusProcessoInt = status.toIntOrNull()
-                    val idTemperamentoInt = temperamento.toIntOrNull()
-                    val idVacinaInt = vacina.toIntOrNull()
 
-                    // Validar se as conversões foram bem-sucedidas
-                    if (idStatusProcessoInt == null) {
-                        Toast.makeText(context, "O ID do Status deve ser um número válido.", Toast.LENGTH_LONG).show()
-                        return@onClick
-                    }
-                    if (idTemperamentoInt == null) {
-                        Toast.makeText(context, "O ID do Temperamento deve ser um número válido.", Toast.LENGTH_LONG).show()
-                        return@onClick
-                    }
-                    if (idVacinaInt == null) {
-                        Toast.makeText(context, "O ID das Vacinas deve ser um número válido.", Toast.LENGTH_LONG).show()
-                        return@onClick
-                    }
 
-                    // Validar se a foto foi carregada com sucesso
-                    if (fotoUrl.isNullOrBlank()) {
-                        Toast.makeText(context, "Por favor, carregue uma foto para o pet.", Toast.LENGTH_LONG).show()
-                        return@onClick
-                    }
 
-                    val idUsuarioInt = 1 // ou obtido de outro lugar
+
+
 
                     val animal = Animal(
                         nome = nome,
                         idade = idade,
                         sexo = sexo,
                         raca = raca,
-                        especie = "dog", // Preencha com valor real se tiver
+                        especie = especie, // Preencha com valor real se tiver
                         foto = fotoUrl!!, // Já é String?, então está ok aqui, fotoUrl é String?
                         localizacao = "dsadwadsdaf", // Preencha com valor real se tiver
                         celular_responsavel = contato_do_dono,
-                        id_status_processo = idStatusProcessoInt, // Agora é Int (não Int?)
-                        id_temperamento = idTemperamentoInt,     // Agora é Int (não Int?)
-                        id_vacina = idVacinaInt,               // Agora é Int (não Int?)
-                        id_status_saude = 1, // Assumindo que este é sempre 1 por enquanto
-                        id_usuario = idUsuarioInt
+                        id_status_processo = id_status_processo, // Agora é Int (não Int?)
+                        id_temperamento = id_temperamento,     // Agora é Int (não Int?)
+                        id_vacina = id_vacina,               // Agora é Int (não Int?)
+                        id_status_saude = id_status_saude, // Assumindo que este é sempre 1 por enquanto
+                        id_usuario = userId
                     )
 
                     // Verifique o nome do serviço correto. Se você está cadastrando Animal,
@@ -525,7 +825,7 @@ fun TelaCadastrarAnimais(navController: NavController?) {
                                 temperamento = ""
                                 vacina = ""
 
-                                navController?.popBackStack() // Exemplo de navegação de volta
+                                navController?.navigate("tela-animais-cadastrados")
                             } else {
                                 Toast.makeText(context, "Erro ao cadastrar animal. Tente novamente.", Toast.LENGTH_LONG).show()
                                 Log.e("API", "Erro ao cadastrar animal: ${response.code()} - ${response.errorBody()?.string()}")
